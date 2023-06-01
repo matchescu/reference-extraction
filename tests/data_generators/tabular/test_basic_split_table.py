@@ -4,15 +4,6 @@ from abstractions.data_structures import Table
 from data_generators.tabular import split_table
 
 
-@pytest.fixture
-def basic_table():
-    result = Table("a", "b", "c")
-    result.load_sequence([
-        ["1", "2", "3"],
-    ])
-    return result
-
-
 def test_split_table_keeps_common_column(sample_table):
     result = split_table(sample_table, 2, 2, 3, "a")
 
