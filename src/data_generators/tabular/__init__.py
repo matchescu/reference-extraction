@@ -1,4 +1,4 @@
-from ._split_table import split_table
+from ._split_table import random_sub_tables
 
 
-__all__ = ["split_table"]
+__all__ = ["random_sub_tables"]
