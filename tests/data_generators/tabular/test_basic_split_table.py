@@ -1,5 +1,4 @@
 import pytest
-from abstractions.data_structures import Table
 
 from data_generators.tabular import random_sub_tables
 
