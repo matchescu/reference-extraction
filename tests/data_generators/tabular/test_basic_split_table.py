@@ -4,13 +4,13 @@ from matchescu.data_generators.tables import SplitTableRandomly
 
 
 @pytest.fixture
-def random_sub_tables(request):
+def random_split(request):
     count = request.param if hasattr(request, "param") and isinstance(request.param, int) else 2
     return SplitTableRandomly(count, ["a"])
 
 
-def test_split_table_keeps_common_column(random_sub_tables, sample_table):
-    result = random_sub_tables(sample_table)
+def test_random_split_output(random_split, sample_table):
+    result = random_split(sample_table)
 
     assert len(result) == 2
     other_columns = {"a"}
@@ -24,9 +24,32 @@ def test_split_table_keeps_common_column(random_sub_tables, sample_table):
         other_columns |= columns_besides_a
 
 
-@pytest.mark.parametrize("random_sub_tables", [1, 3], indirect=True)
-def test_split_table_output_count_out_of_range(sample_table, random_sub_tables):
+@pytest.mark.parametrize("random_split", [1, 3], indirect=True)
+def test_random_split_count_range(sample_table, random_split):
     with pytest.raises(ValueError) as err_proxy:
-        random_sub_tables(sample_table)
+        random_split(sample_table)
 
     assert str(err_proxy.value) == "output count out of range"
+
+
+def test_random_split_fsm_ground_truth(sample_table, random_split):
+    random_split(sample_table)
+
+    assert random_split.ground_truth.fsm is not None
+    assert len(random_split.ground_truth.fsm) == 1
+    assert random_split.ground_truth.fsm == {((1, 3), (1, 2))}
+
+
+def test_random_split_serf_ground_truth(sample_table):
+    splitter = SplitTableRandomly(
+        2,
+        ["a"],
+        merge_function=lambda x, y: tuple(
+            x[i] + y[i]
+            for i in range(min(map(len, [x, y])))
+        )
+    )
+    splitter(sample_table)
+
+    assert splitter.ground_truth.serf is not None
+    assert splitter.ground_truth.serf == {(2, 5)}

@@ -1,15 +1,24 @@
-from typing import Collection
+from typing import Collection, Set, Callable, Optional
 
 import pandas
+from matchescu.data_generators.ground_truth import PandasGroundTruthBuilder
 
-from matchescu.data_generators.typing import DataSource
+from matchescu.data_generators.typing import DataSource, GroundTruth
+from matchescu.typing import Record
 
 
 class SplitTableRandomly:
-    def __init__(self, output_table_count: int, common_columns: list[str]):
+    def __init__(
+        self,
+        output_table_count: int,
+        common_columns: list[str],
+        merge_function: Optional[Callable[[Record, Record], Record]] = None
+    ) -> None:
         self.__count = output_table_count
         self.__fixed = set(common_columns)
         self.__data = pandas.DataFrame()
+        self.__truth = GroundTruth()
+        self.__merge = merge_function
 
     def __non_fixed_generator(self):
         non_fixed_cols = self.__data.loc[:, ~self.__data.columns.isin(self.__fixed)]
@@ -26,8 +35,16 @@ class SplitTableRandomly:
             raise ValueError("output count out of range")
 
         fixed_cols = self.__data.loc[:, self.__data.columns.isin(self.__fixed)]
-
-        return [
+        result = [
             pandas.concat([fixed_cols, df], axis=1)
             for df in self.__non_fixed_generator()
         ]
+        ground_truth_builder = PandasGroundTruthBuilder(result).algebraic().fsm()
+        if self.__merge is not None:
+            ground_truth_builder = ground_truth_builder.serf(self.__merge)
+        self.__truth = ground_truth_builder.ground_truth
+        return result
+
+    @property
+    def ground_truth(self) -> GroundTruth:
+        return self.__truth
