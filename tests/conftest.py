@@ -1,8 +1,8 @@
 from os import PathLike
 from pathlib import Path
-import pytest
-from abstractions.data_structures import Table
 
+import pandas
+import pytest
 
 TEST_DIR = Path(__file__).parent
 
@@ -14,4 +14,4 @@ def sample_csv_file_path() -> str | PathLike:
 
 @pytest.fixture
 def sample_table(sample_csv_file_path):
-    return Table.load_csv(sample_csv_file_path)
+    return pandas.read_csv(sample_csv_file_path)

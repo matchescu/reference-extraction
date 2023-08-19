@@ -1,18 +1,18 @@
 [tool.poetry]
-name = "data-generators"
+name = "matchescu-data-generators"
 version = "0.1.0"
 description = "Data generation pipeline for the Matchescu entity resolution analysis framework"
 authors = ["Andrei Olar <andrei.olar@samlex.ro>"]
 license = "MIT"
 readme = "README.md"
-packages = [
-    {include="matchescu", from="src"}
-]
+packages = [{include="matchescu", from="src"}]
 
 
 [tool.poetry.dependencies]
 python = "^3.11"
 numpy = "^1.24.2"
+pandas = "^2.0.3"
+matchescu-abstractions = {path = "../abstractions"}
 
 
 [tool.poetry.group.dev.dependencies]
