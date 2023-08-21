@@ -3,8 +3,9 @@ from typing import Collection, Set, Callable, Optional
 import pandas
 from matchescu.data_generators.ground_truth import PandasGroundTruthBuilder
 
-from matchescu.data_generators.typing import DataSource, GroundTruth
-from matchescu.typing import Record
+from matchescu.data_generators.typing import DataSource
+from matchescu.entity_resolution_result import EntityResolutionResult
+from matchescu.types import Record
 
 
 class SplitTableRandomly:
@@ -17,11 +18,11 @@ class SplitTableRandomly:
         self.__count = output_table_count
         self.__fixed = set(common_columns)
         self.__data = pandas.DataFrame()
-        self.__truth = GroundTruth()
+        self.__truth = EntityResolutionResult()
         self.__merge = merge_function
 
     def __non_fixed_generator(self):
-        non_fixed_cols = self.__data.loc[:, ~self.__data.columns.isin(self.__fixed)]
+        non_fixed_cols = self.__data.loc[:, ~self.__data.columns.isin(self.__fixed)].copy()
         col_count = non_fixed_cols.shape[1] // self.__count
         for i in range(self.__count):
             result = non_fixed_cols.sample(n=col_count, axis=1)
@@ -46,5 +47,5 @@ class SplitTableRandomly:
         return result
 
     @property
-    def ground_truth(self) -> GroundTruth:
+    def ground_truth(self) -> EntityResolutionResult:
         return self.__truth

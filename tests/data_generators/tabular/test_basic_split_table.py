@@ -20,7 +20,8 @@ def test_random_split_output(random_split, sample_table):
 
         columns_besides_a = set(col for col in table.columns if col != "a")
         assert len(columns_besides_a) == len(table.columns) - 1, "did not expect duplicate column names"
-        assert all(col not in other_columns for col in columns_besides_a), "did not expect column names from other tables"
+        assert all(
+            col not in other_columns for col in columns_besides_a), "did not expect column names from other tables"
         other_columns |= columns_besides_a
 
 
@@ -33,11 +34,16 @@ def test_random_split_count_range(sample_table, random_split):
 
 
 def test_random_split_fsm_ground_truth(sample_table, random_split):
-    random_split(sample_table)
+    tables = random_split(sample_table)
 
     assert random_split.ground_truth.fsm is not None
     assert len(random_split.ground_truth.fsm) == 1
-    assert random_split.ground_truth.fsm == {((1, 3), (1, 2))}
+    assert random_split.ground_truth.fsm == [
+        (
+            (tables[0].iloc[0, 0], tables[0].iloc[0, 1]),
+            (tables[1].iloc[0, 0], tables[1].iloc[0, 1])
+        )
+    ]
 
 
 def test_random_split_serf_ground_truth(sample_table):
@@ -52,4 +58,15 @@ def test_random_split_serf_ground_truth(sample_table):
     splitter(sample_table)
 
     assert splitter.ground_truth.serf is not None
-    assert splitter.ground_truth.serf == {(2, 5)}
+    assert splitter.ground_truth.serf == [(2, 5)]
+
+
+def test_random_split_algebraic_ground_truth(sample_table, random_split):
+    tables = random_split(sample_table)
+
+    assert random_split.ground_truth.algebraic is not None
+    assert len(random_split.ground_truth.algebraic) == 1
+    assert random_split.ground_truth.algebraic == [[
+        (tables[0].iloc[0, 0], tables[0].iloc[0, 1]),
+        (tables[1].iloc[0, 0], tables[1].iloc[0, 1])
+    ]]
