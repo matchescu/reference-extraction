@@ -1,8 +1,8 @@
 from abc import abstractmethod
 from typing import Protocol, Iterable, Collection, Callable
 
-from matchescu.entity_resolution_result import EntityResolutionResult
-from matchescu.types import Record
+from matchescu.adt.entity_resolution_result import EntityResolutionResult
+from matchescu.adt.types import Record
 
 
 class DataSource(Iterable[Record], Protocol):

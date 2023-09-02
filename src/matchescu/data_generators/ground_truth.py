@@ -1,9 +1,9 @@
 from typing import Callable
 
 import pandas
-from matchescu.data_generators.typing import DataGenerator, GroundTruthBuilder
-from matchescu.entity_resolution_result import EntityResolutionResult
-from matchescu.types import Record
+from matchescu.data_generators.typing import GroundTruthBuilder
+from matchescu.adt.entity_resolution_result import EntityResolutionResult
+from matchescu.adt.types import Record
 
 
 class PandasGroundTruthBuilder(GroundTruthBuilder):

@@ -4,8 +4,8 @@ import pandas
 from matchescu.data_generators.ground_truth import PandasGroundTruthBuilder
 
 from matchescu.data_generators.typing import DataSource
-from matchescu.entity_resolution_result import EntityResolutionResult
-from matchescu.types import Record
+from matchescu.adt.entity_resolution_result import EntityResolutionResult
+from matchescu.adt.types import Record
 
 
 class SplitTableRandomly:
