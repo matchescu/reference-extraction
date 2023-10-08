@@ -1,12 +1,12 @@
 import pytest
 
-from matchescu.data_generators.tables import SplitTableRandomly
+from matchescu.data_generators.tables import SplitTable
 
 
 @pytest.fixture
 def random_split(request):
     count = request.param if hasattr(request, "param") and isinstance(request.param, int) else 2
-    return SplitTableRandomly(count, ["a"])
+    return SplitTable(count, ["a"])
 
 
 def test_random_split_output(random_split, sample_table):
@@ -47,7 +47,7 @@ def test_random_split_fsm_ground_truth(sample_table, random_split):
 
 
 def test_random_split_serf_ground_truth(sample_table):
-    splitter = SplitTableRandomly(
+    splitter = SplitTable(
         2,
         ["a"],
         merge_function=lambda x, y: tuple(

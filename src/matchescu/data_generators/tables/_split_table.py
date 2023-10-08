@@ -8,38 +8,25 @@ from matchescu.adt.entity_resolution_result import EntityResolutionResult
 from matchescu.adt.types import Record
 
 
-class SplitTableRandomly:
+class SplitTable:
     def __init__(
         self,
-        output_table_count: int,
-        common_columns: list[str],
+        column_lists:list[list],
         merge_function: Optional[Callable[[Record, Record], Record]] = None
     ) -> None:
-        self.__count = output_table_count
-        self.__fixed = set(common_columns)
+        self.__column_lists = column_lists
         self.__data = pandas.DataFrame()
         self.__truth = EntityResolutionResult()
         self.__merge = merge_function
 
-    def __non_fixed_generator(self):
-        non_fixed_cols = self.__data.loc[:, ~self.__data.columns.isin(self.__fixed)].copy()
-        col_count = non_fixed_cols.shape[1] // self.__count
-        for i in range(self.__count):
-            result = non_fixed_cols.sample(n=col_count, axis=1)
-            yield result
-            non_fixed_cols.drop(result.columns, axis=1, inplace=True)
-
     def __call__(self, input_data: DataSource) -> Collection[DataSource]:
         self.__data = pandas.DataFrame(input_data)
-        n = self.__data.shape[1]
-        if self.__count < 2 or self.__count > n-len(self.__fixed):
-            raise ValueError("output count out of range")
 
-        fixed_cols = self.__data.loc[:, self.__data.columns.isin(self.__fixed)]
         result = [
-            pandas.concat([fixed_cols, df], axis=1)
-            for df in self.__non_fixed_generator()
+            self.__data[col_list]
+            for col_list in self.__column_lists
         ]
+
         ground_truth_builder = PandasGroundTruthBuilder(result).algebraic().fsm()
         if self.__merge is not None:
             ground_truth_builder = ground_truth_builder.serf(self.__merge)

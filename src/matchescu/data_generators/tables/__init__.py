@@ -1,4 +1,4 @@
-from ._split_table import SplitTableRandomly
+from ._split_table import SplitTable
 
 
-__all__ = ["SplitTableRandomly"]
+__all__ = ["SplitTable"]
