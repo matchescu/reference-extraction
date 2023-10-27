@@ -45,7 +45,7 @@ class PandasGroundTruthBuilder(GroundTruthBuilder):
         pairs = {}
         all_refs = {}
         for i in range(self.__record_count):
-            matching_references = set(
+            matching_references = list(
                 tuple(v for v in df.iloc[i, :])
                 for df in self.__data_sources
             )
