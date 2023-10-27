@@ -1,6 +1,9 @@
+import itertools
 from typing import Callable
 
 import pandas
+
+from matchescu.common.partitioning import compute_partition
 from matchescu.data_generators.typing import GroundTruthBuilder
 from matchescu.adt.entity_resolution_result import EntityResolutionResult
 from matchescu.adt.types import Record
@@ -14,6 +17,8 @@ class PandasGroundTruthBuilder(GroundTruthBuilder):
 
     def fsm(self) -> GroundTruthBuilder:
         fsm = []
+        if len(self.__data_sources) != 2:
+            raise ValueError("the Fellegi-Sunter model supports only 2 data sources")
         for i in range(self.__record_count):
             matching_rows = []
             for data_source in self.__data_sources:
@@ -37,17 +42,16 @@ class PandasGroundTruthBuilder(GroundTruthBuilder):
         return self
 
     def algebraic(self) -> "GroundTruthBuilder":
-        partition = {}
+        pairs = {}
+        all_refs = {}
         for i in range(self.__record_count):
-            partition_subset = {
-                tuple(value for value in source.iloc[i, :]): None
-                for source in self.__data_sources
-            }
-            partition[tuple(v for v in partition_subset)] = None
-        self.__truth.algebraic = [
-            [item for item in partition_row]
-            for partition_row in partition
-        ]
+            matching_references = set(
+                tuple(v for v in df.iloc[i, :])
+                for df in self.__data_sources
+            )
+            pairs.update({pair: None for pair in itertools.combinations(matching_references, 2)})
+            all_refs.update({ref: None for ref in matching_references})
+        self.__truth.algebraic = compute_partition(list(all_refs), list(pairs))
         return self
 
     @property
