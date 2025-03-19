@@ -1,5 +1,4 @@
 from collections.abc import Sequence, Iterator
-from functools import partial
 from os import PathLike
 from pathlib import Path
 
@@ -34,8 +33,7 @@ class CsvDataSource:
     def __iter__(self) -> Iterator[Record]:
         if self.__df is None:
             return iter([])
-        new_record = partial(Record, source=self.name)
-        return iter(map(new_record, self.__df.iter_rows(named=True)))
+        return iter(map(Record, self.__df.iter_rows(named=True)))
 
     def __len__(self) -> int:
         return self.__df.shape[0] if self.__df is not None else 0

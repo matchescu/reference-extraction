@@ -17,12 +17,6 @@ def test_init_from_types_expected_col_name(init_data, col_name):
     assert r[col_name] == "a"
 
 
-def test_init_source_name():
-    r = Record({"a": 1}, source="Test")
-
-    assert r.source == "Test"
-
-
 @pytest.mark.parametrize("init_data,expected_len", [([], 0), ([1], 1), ([1, 2], 2)])
 def test_record_len(init_data, expected_len):
     r = Record(init_data)
