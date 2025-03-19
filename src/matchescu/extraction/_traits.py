@@ -33,10 +33,9 @@ class RecordExtractionTrait:
     def __call__(self, input_records: list[Record]) -> Record:
         if len(input_records) == 0:
             return Record([])
-        return Record({
-            key: self.__mapping(input_records[0][key])
-            for key in self.__keys
-        })
+        return Record(
+            {key: self.__mapping(input_records[0][key]) for key in self.__keys}
+        )
 
 
 class Traits:

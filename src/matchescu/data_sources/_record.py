@@ -20,10 +20,9 @@ class Record:
     def merge(records: Iterable["Record"]) -> "Record":
         merge_record = {}
         for record in records:
-            merge_record.update({
-                k: record.__values[i]
-                for k, i in record.__attr_names.items()
-            })
+            merge_record.update(
+                {k: record.__values[i] for k, i in record.__attr_names.items()}
+            )
         return Record(merge_record)
 
     def __init_data(self, value: Iterable) -> Iterable[tuple]:
@@ -31,7 +30,9 @@ class Record:
             return ((self.__get_attr_key(k), v) for k, v in value.items())
         elif isinstance(value, (tuple, list, set)):
             return ((self.__get_attr_key(i), v) for i, v in enumerate(value, start=1))
-        raise ValueError(f"can't initialize data record from '{type(value).__name__}' values")
+        raise ValueError(
+            f"can't initialize data record from '{type(value).__name__}' values"
+        )
 
     def __getitem__(self, key: str | int) -> Any:
         if isinstance(key, str):

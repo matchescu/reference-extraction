@@ -29,12 +29,13 @@ def data_source(csv_path, traits):
 @pytest.fixture
 def record_adapter(data_source):
     mock = MagicMock(name="RecordAdapterMock", spec=RecordAdapter)
+
     def mock_body(record: Record) -> EntityReferenceStub:
         result = EntityReferenceStub(record)
         result.id = EntityReferenceIdentifier(
-            label=record["id"],
-            source=data_source.name
+            label=record["id"], source=data_source.name
         )
         return result
+
     mock.side_effect = mock_body
     return mock

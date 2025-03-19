@@ -10,13 +10,15 @@ class ListDataSource:
         self.traits = traits
         self._items: list[Record] = []
 
-    def append(self, item: Record|Iterable[Record]) -> "ListDataSource":
+    def append(self, item: Record | Iterable[Record]) -> "ListDataSource":
         if isinstance(item, Iterable):
             item = Record.merge(item)
         self._items.append(item)
         return self
 
-    def extend(self, items: Iterable[Record]|Iterable[Iterable[Record]]) -> "ListDataSource":
+    def extend(
+        self, items: Iterable[Record] | Iterable[Iterable[Record]]
+    ) -> "ListDataSource":
         for item in items:
             self.append(item)
         return self
