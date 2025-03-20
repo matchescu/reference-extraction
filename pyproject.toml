@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "matchescu-reference-extraction"
-version = "0.1.0"
+version = "0.1.1"
 description = "Extract references from a multitude of data sources"
 authors = ["Andrei Olar <andrei.olar@samlex.ro>"]
 license = "MIT"
@@ -9,7 +9,7 @@ packages = [{include="matchescu", from="src"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
-matchescu-base = "^0.10.0"
+matchescu-base = "^0.11.0"
 polars = "^1.25.2"
 
 [tool.poetry.group.dev.dependencies]
