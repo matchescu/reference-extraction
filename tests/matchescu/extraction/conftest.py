@@ -1,18 +1,13 @@
-from unittest.mock import MagicMock
-
 import pytest
 
-from matchescu.data_sources import Record, CsvDataSource
-from matchescu.extraction import Traits
-from matchescu.typing import EntityReferenceIdentifier, RecordAdapter
-
-
-class EntityReferenceStub(Record):
-    id: EntityReferenceIdentifier
+from matchescu.data_sources import CsvDataSource
+from matchescu.extraction import RecordIdAdapter, Traits
+from matchescu.references import EntityReference
+from matchescu.typing import EntityReferenceIdentifier
 
 
 @pytest.fixture
-def traits():
+def csv_traits():
     return list(
         Traits()
         .int(["id"])
@@ -22,20 +17,20 @@ def traits():
 
 
 @pytest.fixture
-def data_source(csv_path, traits):
-    return CsvDataSource(csv_path, traits).read()
+def csv_data_source(csv_path, csv_traits):
+    return CsvDataSource(csv_path, csv_traits).read()
 
 
 @pytest.fixture
-def record_adapter(data_source):
-    mock = MagicMock(name="RecordAdapterMock", spec=RecordAdapter)
+def entity_reference(csv_data_source, request) -> EntityReference:
+    ref_id = request.param if hasattr(request, "param") else 1
+    return EntityReference(
+        EntityReferenceIdentifier(ref_id, csv_data_source.name), {"id": ref_id}
+    )
 
-    def mock_body(record: Record) -> EntityReferenceStub:
-        result = EntityReferenceStub(record)
-        result.id = EntityReferenceIdentifier(
-            label=record["id"], source=data_source.name
-        )
-        return result
 
-    mock.side_effect = mock_body
-    return mock
+@pytest.fixture
+def record_adapter(csv_data_source):
+    return RecordIdAdapter(
+        lambda r: EntityReferenceIdentifier(r.id, csv_data_source.name)
+    )

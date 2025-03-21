@@ -1,10 +1,13 @@
+from matchescu.extraction._adapters import RecordIdAdapter
+from matchescu.extraction._base import EntityReferenceExtraction
+from matchescu.extraction._record import RecordExtraction
+from matchescu.extraction._samplers import single_record
 from matchescu.extraction._traits import Traits
-from matchescu.extraction._basic import EntityReferenceExtractionFromRecords
-from matchescu.extraction._csv import CsvEntityReferenceExtraction
-
 
 __all__ = [
-    "CsvEntityReferenceExtraction",
-    "EntityReferenceExtractionFromRecords",
+    "EntityReferenceExtraction",
+    "RecordExtraction",
+    "RecordIdAdapter",
     "Traits",
+    "single_record",
 ]
