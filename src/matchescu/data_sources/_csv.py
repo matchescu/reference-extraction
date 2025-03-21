@@ -6,7 +6,7 @@ import polars as pl
 
 from matchescu.typing import Trait
 
-from matchescu.data_sources._record import Record
+from matchescu.data import Record
 
 
 class CsvDataSource:
