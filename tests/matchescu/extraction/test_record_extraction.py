@@ -1,6 +1,3 @@
-import itertools
-from unittest.mock import call
-
 import pytest
 
 from matchescu.extraction import RecordExtraction, single_record

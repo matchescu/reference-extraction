@@ -1,7 +1,7 @@
 from typing import Iterable, Iterator
 
+from matchescu.data import Record
 from matchescu.typing import Trait
-from matchescu.data_sources._record import Record
 
 
 class ListDataSource:
