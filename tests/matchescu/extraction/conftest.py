@@ -1,7 +1,7 @@
 import pytest
 
 from matchescu.data_sources import CsvDataSource
-from matchescu.extraction import RecordIdAdapter, Traits
+from matchescu.extraction import Traits
 from matchescu.references import EntityReference
 from matchescu.typing import EntityReferenceIdentifier
 
@@ -9,10 +9,7 @@ from matchescu.typing import EntityReferenceIdentifier
 @pytest.fixture
 def csv_traits():
     return list(
-        Traits()
-        .int(["id"])
-        .string(["name", "description", "manufacturer"])
-        .currency(["price"])
+        Traits().string(["name", "description", "manufacturer"]).currency(["price"])
     )
 
 
@@ -30,7 +27,5 @@ def entity_reference(csv_data_source, request) -> EntityReference:
 
 
 @pytest.fixture
-def record_adapter(csv_data_source):
-    return RecordIdAdapter(
-        lambda r: EntityReferenceIdentifier(r.id, csv_data_source.name)
-    )
+def id_factory(csv_data_source):
+    return lambda rows: EntityReferenceIdentifier(rows[0]["id"], csv_data_source.name)

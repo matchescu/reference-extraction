@@ -9,7 +9,7 @@ packages = [{include="matchescu", from="src"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
-matchescu-base = "^0.14.0"
+matchescu-base = "^0.16.1"
 polars = "^1.25.2"
 
 [tool.poetry.group.dev.dependencies]
