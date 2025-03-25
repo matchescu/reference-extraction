@@ -2,8 +2,8 @@ import locale
 
 from typing import Any, Callable, Iterator, Union
 
+from matchescu.data import Record
 from matchescu.typing import Trait
-from matchescu.data_sources import Record
 
 
 def _process_string(value: Any) -> str:
