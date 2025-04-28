@@ -11,7 +11,7 @@ def _process_string(value: Any) -> str:
 
 
 def _process_int(value: Any) -> int:
-    return int(value)
+    return int(value or -1)
 
 
 def _process_float(value: Any) -> float:
