@@ -87,14 +87,14 @@ files = [
 
 [[package]]
 name = "matchescu-base"
-version = "0.21.0"
+version = "0.22.1"
 description = "Base abstract data types for Entity Resolution"
 optional = false
 python-versions = "<4.0,>=3.11"
 groups = ["main"]
 files = [
-    {file = "matchescu_base-0.21.0-py3-none-any.whl", hash = "sha256:508410e2e5c4ff490674c6327d3f73fb834db192cd5874e52b3fbc929a61f843"},
-    {file = "matchescu_base-0.21.0.tar.gz", hash = "sha256:2240b7459cde8821fd4ff4ad223022ed36a58050fe7738296721e663abf53770"},
+    {file = "matchescu_base-0.22.1-py3-none-any.whl", hash = "sha256:b6a248fa24ac3c3d750a8753a5a3814441779f0b201880b62c0db21a992eb06a"},
+    {file = "matchescu_base-0.22.1.tar.gz", hash = "sha256:60e780293416731a0e3b0d2acc5535def9e6694ebb63c9738bf87d23239d91ce"},
 ]
 
 [package.dependencies]
@@ -350,4 +350,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "3177995f8e92ee4135f83c6bf86415be65f40dbe53cbd14dfeba901321f945f9"
+content-hash = "4b0339ace6d19b747ee16cfcd712e76d46f2ba8d3bad3b74dcaad33b56bce3f4"
