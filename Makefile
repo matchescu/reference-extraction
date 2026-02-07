@@ -1,6 +1,6 @@
 VENV := .venv
 TIMESTAMP := $(VENV)/.poetry_installed
-PYTHON_VERSION := 3.12
+PYTHON_VERSION := 3.13
 
 .PHONY: check-deps bump-patch bump-minor bump-major bump-release bump-prepatch bump-preminor bump-premajor bump-prerelease re-tag
 
@@ -11,8 +11,7 @@ check-deps:
 	@command -v pyenv >/dev/null 2>&1 || { echo "Error: 'pyenv' is not installed or not in PATH." >&2; exit 1; }
 
 $(VENV):
-	pyenv local 3.12
-	poetry env use 3.12  # Ensure the virtual environment exists
+	poetry env use $(PYTHON_VERSION)  # Ensure the virtual environment exists
 
 $(TIMESTAMP): pyproject.toml poetry.lock | $(VENV)
 	poetry install
