@@ -2,8 +2,7 @@ import pytest
 
 from matchescu.data_sources import CsvDataSource
 from matchescu.extraction import Traits
-from matchescu.references import EntityReference
-from matchescu.typing import EntityReferenceIdentifier
+from matchescu.typing import EntityReferenceIdentifier, EntityReference
 
 
 @pytest.fixture

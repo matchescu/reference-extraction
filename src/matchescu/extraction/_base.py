@@ -3,7 +3,6 @@ from typing import Generic, Generator, Iterable
 
 from matchescu.typing._data import TRecord, DataSource, RecordSampler
 from matchescu.typing._references import EntityReference, EntityReferenceIdFactory
-from matchescu.references._record import EntityReference as RefImpl
 
 
 class EntityReferenceExtraction(Generic[TRecord], metaclass=ABCMeta):
@@ -35,7 +34,7 @@ class EntityReferenceExtraction(Generic[TRecord], metaclass=ABCMeta):
         identifier = self.__id_factory(input_records)
         trait_records = self.__process_traits(input_records)
         merged_record = self._merge_records(trait_records)
-        return RefImpl(identifier, merged_record)
+        return EntityReference(identifier, merged_record)
 
     @property
     def source_name(self):
