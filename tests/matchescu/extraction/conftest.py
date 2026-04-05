@@ -1,8 +1,9 @@
 import pytest
 
-from matchescu.data_sources import CsvDataSource
 from matchescu.extraction import Traits
 from matchescu.typing import EntityReferenceIdentifier, EntityReference
+
+from matchescu.extraction.csv._file import CsvFile
 
 
 @pytest.fixture
@@ -14,7 +15,7 @@ def csv_traits():
 
 @pytest.fixture
 def csv_data_source(csv_path, csv_traits):
-    return CsvDataSource(csv_path, csv_traits).read()
+    return CsvFile(csv_path, csv_traits)
 
 
 @pytest.fixture

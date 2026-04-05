@@ -1,15 +1,17 @@
 from collections.abc import Sequence, Iterator
 from os import PathLike
 from pathlib import Path
+from typing import Iterable
 
 import polars as pl
 
 from matchescu.typing import Trait
 
 from matchescu.data import Record
+from matchescu.typing import DataSource
 
 
-class CsvDataSource:
+class CsvFile(DataSource):
     def __init__(
         self,
         file_path: str | PathLike,
@@ -21,14 +23,30 @@ class CsvDataSource:
         self.traits = traits
 
         self.__file_path = file_path
-        self.__df: pl.DataFrame | None = None
         self.__header = has_header
+        try:
+            self.__df = pl.read_csv(
+                self.__file_path, ignore_errors=True, has_header=self.__header
+            )
+        except pl.NoDataError:
+            self.__df = pl.DataFrame()
 
-    def read(self) -> "CsvDataSource":
-        self.__df = pl.read_csv(
-            self.__file_path, ignore_errors=True, has_header=self.__header
-        )
-        return self
+    @property
+    def has_header(self) -> bool:
+        return self.__header
+
+    @property
+    def path(self) -> Path:
+        return self.__file_path
+
+    @property
+    def columns(self) -> Iterable[str]:
+        return self.__df.columns
+
+    def __getitem__(self, idx: int) -> Record:
+        if not isinstance(idx, int):
+            raise ValueError("only integer indexing is supported")
+        return Record(self.__df.row(idx, named=True))
 
     def __iter__(self) -> Iterator[Record]:
         if self.__df is None:
