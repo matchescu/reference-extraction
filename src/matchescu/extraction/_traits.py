@@ -10,11 +10,15 @@ def _process_string(value: Any) -> str:
     return str(value)
 
 
-def _process_int(value: Any) -> int:
-    return int(value or -1)
+def _process_int(value: Any) -> int | None:
+    if value is None:
+        return None
+    return int(value)
 
 
-def _process_float(value: Any) -> float:
+def _process_float(value: Any) -> float | None:
+    if value is None:
+        return None
     return float(value)
 
 
