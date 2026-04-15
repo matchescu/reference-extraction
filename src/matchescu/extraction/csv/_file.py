@@ -17,6 +17,7 @@ class CsvFile(DataSource):
         file_path: str | PathLike,
         traits: Sequence[Trait],
         has_header: bool = True,
+        schema_overrides: dict[str, pl.DataType] | None = None,
     ):
         file_path = Path(file_path)
         self.name = file_path.name.replace(file_path.suffix, "")
@@ -26,7 +27,10 @@ class CsvFile(DataSource):
         self.__header = has_header
         try:
             self.__df = pl.read_csv(
-                self.__file_path, ignore_errors=True, has_header=self.__header
+                self.__file_path,
+                ignore_errors=True,
+                has_header=self.__header,
+                schema_overrides=schema_overrides,
             )
         except pl.NoDataError:
             self.__df = pl.DataFrame()

@@ -1,13 +1,10 @@
 import os
-from typing import Callable
-from unittest.mock import MagicMock
 
 import pytest
 from pathlib import Path
 
 from matchescu.extraction import Traits
 from matchescu.extraction.csv._extraction import CsvRecordExtraction
-from matchescu.typing import Record
 
 
 @pytest.fixture
@@ -96,19 +93,6 @@ def test_id_attr_missing_uses_first_element(csv_path, traits, id_attr):
     refs = list(extract())
 
     assert refs[0].id.label == 1
-
-
-def test_custom_source_finder(csv_path, traits):
-    expected = "custom source"
-    custom = MagicMock(
-        spec=Callable[[Record, str | int | None, str | None], str],
-        return_value=expected,
-    )
-
-    extract = CsvRecordExtraction(csv_path, traits, source_finder=custom)
-    ref_id = list(extract())[0].id
-
-    assert ref_id.source == "custom source"
 
 
 @pytest.mark.parametrize("csv_headers", [None], indirect=True)

@@ -1,6 +1,7 @@
 from pathlib import Path
-from typing import Iterable, Callable
+from typing import Iterable
 
+import polars as pl
 from matchescu.extraction import RecordExtraction, single_record, Traits
 from matchescu.typing import Record, EntityReferenceIdentifier as RefId
 
@@ -15,15 +16,23 @@ class CsvRecordExtraction(RecordExtraction):
         id_attr: str | int = 0,
         source_attr: str | int | None = None,
         has_header: bool = True,
-        source_finder: (
-            Callable[[Record, str | int | None, str | None], str] | None
-        ) = None,
+        source_fallback: str | None = None,
     ):
         self.__fpath = Path(fpath).absolute()
-        self.__source_attr = source_attr
         self.__id_attr = id_attr
-        self.__source_finder = source_finder or self._get_source
-        self.__ds = CsvFile(self.__fpath, list(traits), has_header=has_header)
+        self.__source_attr = source_attr
+        schema_overrides = (
+            {self.__source_attr: pl.String}
+            if isinstance(self.__source_attr, str)
+            else None
+        )
+        self.__ds = CsvFile(
+            self.__fpath,
+            list(traits),
+            has_header=has_header,
+            schema_overrides=schema_overrides,
+        )
+        self.__source_fallback = source_fallback or self.__ds.name
         super().__init__(self.__ds, self._id_factory, single_record)
 
     def _get_source(
@@ -40,7 +49,7 @@ class CsvRecordExtraction(RecordExtraction):
             label = record[self.__id_attr]
         except ValueError:
             label = record[0]
-        source = self.__source_finder(record, self.__source_attr, self.__ds.name)
+        source = self._get_source(record, self.__source_attr, self.__source_fallback)
         return RefId(label=label, source=source)
 
     @property
