@@ -50,7 +50,7 @@ class CsvRecordExtraction(RecordExtraction):
         except ValueError:
             label = record[0]
         source = self._get_source(record, self.__source_attr, self.__source_fallback)
-        return RefId(label=label, source=source)
+        return RefId(label=label, source=str(source))
 
     @property
     def data_source(self) -> CsvFile:

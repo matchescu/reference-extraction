@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "matchescu-reference-extraction"
-version = "0.9.4"
+version = "0.9.5"
 description = "Extract references from a multitude of data sources"
 authors = ["Andrei Olar <andrei.olar@samlex.ro>"]
 license = "MIT"
